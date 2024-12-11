@@ -1,122 +1,97 @@
-package org.example;
+    package org.example;
 
-import java.util.Random;
-import java.util.Scanner;
+    import java.util.Random;
+    import java.util.Scanner;
+    import java.util.*;
 
-public class Main {
-    public static void main(String[] args) {
+    public class Main {
+
+        public static void main(String[] args) {
+            do{
+                Run();
+            }while (true);
+        }
+    public static void Run (){
+
+        // Khởi tạo Scanner để nhập dữ liệu từ người dùng
         Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
 
-        // Khởi tạo đối tượng StudentManagement với số lượng sinh viên tối đa là 100
-        StudentManagement studentManagement = new StudentManagement(100);
+        // Yêu cầu người dùng nhập số lượng sinh viên n
+        System.out.print("Enter the number of students: ");
+        int n = scanner.nextInt();  // Nhập số nguyên n từ người dùng
+        // Tạo danh sách sinh viên giả lập
+        List<Student1> Liststudents = generateFakeStudents(n);
 
-        int choice;
+        // Chuyển Liststudents thành mảng để sử dụng trong QuickSort, MergeSort và BubbleSort
+        Student1[] stackArray1 = Liststudents.toArray(new Student1[0]);
+        Student1[] stackArray2 = Liststudents.toArray(new Student1[0]);
+        Student1[] stackArray3 = Liststudents.toArray(new Student1[0]);
 
-        do {
-            System.out.println("\nMenu:");
-            System.out.println("1. Thêm sinh viên");
-            System.out.println("2. Hiển thị sinh viên");
-            System.out.println("3. Sắp xếp sinh viên theo điểm (Bubble Sort)");
-            System.out.println("4. Cập nhật điểm sinh viên");
-            System.out.println("5. Xóa sinh viên");
-            System.out.println("6. Tìm kiếm sinh viên");
-            System.out.println("0. Thoát");
-            System.out.print("Chọn chức năng: ");
-            choice = scanner.nextInt();
-            scanner.nextLine(); // Đọc bỏ dòng thừa
+        // Tạo một stack với dung lượng tối đa 10000 sinh viên
+        Stack stack = new Stack(n);
+        Stack stack2 = new Stack(n);
+        Stack stack3 = new Stack(n);
 
-            switch (choice) {
-                case 1:
-                    // Thêm sinh viên bằng tay hoặc ngẫu nhiên
-                    System.out.println("Chọn phương thức thêm sinh viên:");
-                    System.out.println("1. Thêm sinh viên bằng tay");
-                    System.out.println("2. Thêm sinh viên ngẫu nhiên");
-                    System.out.print("Chọn phương thức: ");
-                    int addChoice = scanner.nextInt();
 
-                    if (addChoice == 1) {
-                        // Thêm sinh viên bằng tay
-                        System.out.print("Nhập ID: ");
-                        int id = scanner.nextInt();
-                        scanner.nextLine(); // Đọc bỏ dòng thừa
-                        System.out.print("Nhập tên: ");
-                        String name = scanner.nextLine();
-                        System.out.print("Nhập số điện thoại: ");
-                        String contactNumber = scanner.nextLine();
-                        System.out.print("Nhập điểm: ");
-                        double score = scanner.nextDouble();
-                        Student student = new Student(id, name, contactNumber, score);
-                        studentManagement.addStudent(student);
-                        System.out.println("Đã thêm sinh viên " + name);
-                    } else if (addChoice == 2) {
-                        // Thêm sinh viên ngẫu nhiên
-                        System.out.print("Nhập số lượng sinh viên cần thêm: ");
-                        int numStudents = scanner.nextInt();
+        // Thêm tất cả sinh viên vào stack
+        for (Student1 student : Liststudents) {
+            stack.push(student); // Thêm từng sinh viên vào stack
+        }
+        for (Student1 student : Liststudents) {
+            stack2.push(student); // Thêm từng sinh viên vào stack2
+        }
+        for (Student1 student : Liststudents) {
+            stack3.push(student); // Thêm từng sinh viên vào stack3
+        }
 
-                        if (numStudents > 100) {
-                            System.out.println("Số lượng sinh viên không thể vượt quá 100!");
-                        } else {
-                            for (int i = 0; i < numStudents; i++) {
-                                int id = i + 1;
-                                String name = "Sinh viên " + (i + 1);
-                                String contactNumber = "01234567" + (random.nextInt(90) + 10);
-                                double score = random.nextDouble() * 10;
+        // QuickSort: Đo thời gian sắp xếp
+        long startTime = System.nanoTime();
+        QuickSort.quickSort(stackArray1, 0, stackArray1.length - 1);
+        long endTime = System.nanoTime();
+        long quickSortTime = endTime - startTime;
+        System.out.println("QuickSort time: " + quickSortTime + " nanoseconds");
 
-                                Student student = new Student(id, name, contactNumber, score);
-                                studentManagement.addStudent(student);
-                            }
-                            System.out.println("Đã thêm " + numStudents + " sinh viên ngẫu nhiên.");
-                        }
-                    } else {
-                        System.out.println("Lựa chọn không hợp lệ.");
-                    }
-                    break;
+        // MergeSort: Đo thời gian sắp xếp
+        startTime = System.nanoTime();
+        MergeSort.mergeSort(stackArray2, 0, stackArray2.length - 1);
+        endTime = System.nanoTime();
+        long mergeSortTime = endTime - startTime;
+        System.out.println("MergeSort time: " + mergeSortTime + " nanoseconds");
 
-                case 2:
-                    // Hiển thị danh sách sinh viên
-                    studentManagement.displayStudents();
-                    break;
+        // BubbleSort: Đo thời gian sắp xếp
+        startTime = System.nanoTime();
+        BubbleSort.sort(stackArray3); // Sử dụng BubbleSort từ class BubbleSort
+        endTime = System.nanoTime();
+        long bubbleSortTime = endTime - startTime;
+        System.out.println("BubbleSort time: " + bubbleSortTime + " nanoseconds");
 
-                case 3:
-                    // Sắp xếp sinh viên theo điểm bằng Bubble Sort
-                    System.out.println("Đang sắp xếp sinh viên theo điểm bằng Bubble Sort...");
-                    studentManagement.sortStudentsByBubbleSort();
-                    studentManagement.displayStudents();
-                    break;
-
-                case 4:
-                    // Cập nhật điểm sinh viên
-                    System.out.print("Nhập ID sinh viên cần cập nhật điểm: ");
-                    int updateId = scanner.nextInt();
-                    System.out.print("Nhập điểm mới: ");
-                    double newScore = scanner.nextDouble();
-                    studentManagement.updateStudent(updateId, newScore);
-                    break;
-
-                case 5:
-                    // Xóa sinh viên theo ID
-                    System.out.print("Nhập ID sinh viên cần xóa: ");
-                    int deleteId = scanner.nextInt();
-                    studentManagement.deleteStudent(deleteId);
-                    break;
-
-                case 6:
-                    // Tìm kiếm sinh viên theo ID
-                    System.out.print("Nhập ID sinh viên cần tìm: ");
-                    int searchId = scanner.nextInt();
-                    studentManagement.searchStudent(searchId);
-                    break;
-
-                case 0:
-                    System.out.println("Thoát chương trình.");
-                    break;
-
-                default:
-                    System.out.println("Lựa chọn không hợp lệ.");
-            }
-        } while (choice != 0);
-
-        scanner.close();
+        // In ra thời gian sắp xếp
+        if (quickSortTime < mergeSortTime && quickSortTime < bubbleSortTime) {
+            System.out.println("\nQuickSort is the fastest.");
+        } else if (mergeSortTime < quickSortTime && mergeSortTime < bubbleSortTime) {
+            System.out.println("\nMergeSort is the fastest.");
+        } else if (bubbleSortTime < quickSortTime && bubbleSortTime < mergeSortTime) {
+            System.out.println("\nBubbleSort is the fastest.");
+        } else {
+            System.out.println("\nAll sorting algorithms have the same performance.");
+        }
     }
-}
+        // Phương thức tạo sinh viên giả lập
+        public static List<Student1> generateFakeStudents(int count) {
+            List<Student1> students = new ArrayList<>();
+            Random random = new Random();
+
+            // Tạo ngẫu nhiên sinh viên
+            for (int i = 1; i <= count; i++) {
+                int id = i;
+                String name = "Student " + i;
+                String contactNumber = "090" + String.format("%08d", random.nextInt(100000000));
+                double marks = 5 + random.nextDouble() * 5; // Điểm ngẫu nhiên từ 5.0 đến 10.0
+
+                Student1 student = new Student1(id, name, contactNumber, marks);
+                students.add(student);
+            }
+
+            return students;
+        }
+    }
